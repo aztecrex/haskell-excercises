@@ -1,5 +1,7 @@
 module Excercises where
 
+import Data.Either.Combinators (swapEither)
+
 class Fluffy f where
   furry :: (a -> b) -> f a -> f b
 
@@ -66,20 +68,22 @@ instance Misty Maybe where
 -- Exercise 9
 -- Relative Difficulty: 6
 instance Misty ((->) t) where
-  banana = error "todo"
-  unicorn = error "todo"
+  banana f mx = \a -> f (mx a) a
+  unicorn x = \_ -> x
 
 -- Exercise 10
 -- Relative Difficulty: 6
 instance Misty (EitherLeft t) where
-  banana = error "todo"
-  unicorn = error "todo"
+  banana f (EitherLeft (Left x))  = f x
+  banana f (EitherLeft (Right x)) = EitherLeft (Right x)
+  unicorn x = EitherLeft (Left x)
 
 -- Exercise 11
 -- Relative Difficulty: 6
 instance Misty (EitherRight t) where
-  banana = error "todo"
-  unicorn = error "todo"
+  banana f (EitherRight (Right x))  = f x
+  banana f (EitherRight (Left x)) = EitherRight (Left x)
+  unicorn x = EitherRight (Right x)
 
 -- Exercise 12
 -- Relative Difficulty: 3
