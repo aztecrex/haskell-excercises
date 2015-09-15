@@ -88,12 +88,20 @@ instance Misty (EitherRight t) where
 -- Exercise 12
 -- Relative Difficulty: 3
 jellybean :: (Misty m) => m (m a) -> m a
-jellybean = error "todo"
+jellybean = banana id
+
+{- some experiments to determine how apple should look -}
+apple' ma mf = do
+  a <- ma
+  f <- mf
+  return $ f a
+
+apple'' ma mf = ma >>= (\a -> (mf >>= (\f -> return (f a))))
 
 -- Exercise 13
 -- Relative Difficulty: 6
 apple :: (Misty m) => m a -> m (a -> b) -> m b
-apple = error "todo"
+apple ma mf = banana (\a -> (banana (\f -> unicorn (f a)) mf ) ) ma
 
 -- Exercise 14
 -- Relative Difficulty: 6
