@@ -103,10 +103,33 @@ apple'' ma mf = ma >>= (\a -> (mf >>= (\f -> return (f a))))
 apple :: (Misty m) => m a -> m (a -> b) -> m b
 apple ma mf = banana (\a -> (banana (\f -> unicorn (f a)) mf ) ) ma
 
+{- some experiments to determine the shape of moppy -}
+
+li :: [Int]
+li = [1,2,3]
+
+i2ms :: Int -> Maybe String
+i2ms x = Just $ show x
+
+huh :: Monad m => [m a] -> m [a]
+huh [] = return []
+huh (ms:mss) = ms >>= (\s -> return [s])
+-- huh ((Just s):ss) = Just [s] ++ ( huh ss )
+
+
+
+
+moppy' :: [a] -> (a -> Maybe b) -> Maybe [b]
+moppy' [] _ = Just []
+moppy' as f = do
+  let inverted = fmap f as
+  return []
+
 -- Exercise 14
 -- Relative Difficulty: 6
 moppy :: (Misty m) => [a] -> (a -> m b) -> m [b]
-moppy = error "todo"
+moppy [] _ = unicorn []
+moppy _ _ = error "todo"
 
 -- Exercise 15
 -- Relative Difficulty: 6
