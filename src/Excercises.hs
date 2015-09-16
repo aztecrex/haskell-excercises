@@ -1,6 +1,6 @@
 module Excercises where
 
-import Data.Either.Combinators (swapEither)
+import Control.Monad(foldM)
 
 class Fluffy f where
   furry :: (a -> b) -> f a -> f b
@@ -103,16 +103,49 @@ apple'' ma mf = ma >>= (\a -> (mf >>= (\f -> return (f a))))
 apple :: (Misty m) => m a -> m (a -> b) -> m b
 apple ma mf = banana (\a -> (banana (\f -> unicorn (f a)) mf ) ) ma
 
+
 -- Exercise 14
 -- Relative Difficulty: 6
+{- some experiments to determine the shape of moppy -}
+
+invert :: (Monad m) => [m a] -> m [a]
+invert ms = fmap reverse $ foldM comb [] ms
+  where comb as ma = ma >>= (\a -> return (a:as))
+
+moppy' :: (Monad m) => [a] -> (a -> m b) -> m [b]
+moppy' as mf = invert $ fmap mf as
+
+li :: [Int]
+li = [1,2,3]
+
+i2ms :: Int -> Maybe String
+i2ms x = Just $ show x
+
+moppied' :: Maybe [String]
+moppied' = moppy' li i2ms
+
+
+foldy :: (Misty m) => (b -> a -> m b) -> b -> [a] -> m b
+foldy _ a [] = unicorn a
+foldy f a (x:xs) = (\ax -> foldy f ax xs) `banana` ( f a x )
+-- foldy = error "todo"
+
+confusy :: (Misty m) => [m a] -> m [a]
+confusy ms = furry' reverse $ foldy combiny [] ms
+  where combiny as ma = (\a -> unicorn (a:as)) `banana` ma
+
 moppy :: (Misty m) => [a] -> (a -> m b) -> m [b]
-moppy = error "todo"
+moppy as mf = confusy $ fmap mf as
+
+-- show that moppy works
+moppied :: Maybe [String]
+moppied = moppy li i2ms
 
 -- Exercise 15
 -- Relative Difficulty: 6
 -- (bonus: use moppy)
 sausage :: (Misty m) => [m a] -> m [a]
-sausage = error "todo"
+sausage = confusy
 
 -- Exercise 16
 -- Relative Difficulty: 6
