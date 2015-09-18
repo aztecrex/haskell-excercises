@@ -151,7 +151,8 @@ moppyIsGood = moppied == moppied'
 -- Relative Difficulty: 6
 -- (bonus: use moppy)
 sausage :: (Misty m) => [m a] -> m [a]
-sausage = confusy
+sausage ms = moppy ms id
+-- sausage = confusy
 
 -- Exercise 16
 -- Relative Difficulty: 6
