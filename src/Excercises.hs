@@ -125,15 +125,19 @@ moppied' :: Maybe [String]
 moppied' = moppy' li i2ms
 
 
+-- so here is the Misty version of the above.
+
+-- like foldM
 foldy :: (Misty m) => (b -> a -> m b) -> b -> [a] -> m b
 foldy _ a [] = unicorn a
 foldy f a (x:xs) = (\ax -> foldy f ax xs) `banana` ( f a x )
--- foldy = error "todo"
 
+-- like invert
 confusy :: (Misty m) => [m a] -> m [a]
 confusy ms = furry' reverse $ foldy combiny [] ms
   where combiny as ma = (\a -> unicorn (a:as)) `banana` ma
 
+-- Finally..... Moppy!
 moppy :: (Misty m) => [a] -> (a -> m b) -> m [b]
 moppy as mf = confusy $ fmap mf as
 
@@ -141,11 +145,14 @@ moppy as mf = confusy $ fmap mf as
 moppied :: Maybe [String]
 moppied = moppy li i2ms
 
+moppyIsGood = moppied == moppied'
+
 -- Exercise 15
 -- Relative Difficulty: 6
 -- (bonus: use moppy)
 sausage :: (Misty m) => [m a] -> m [a]
-sausage = confusy
+sausage ms = moppy ms id
+-- sausage = confusy
 
 -- Exercise 16
 -- Relative Difficulty: 6
