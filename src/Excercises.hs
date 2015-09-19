@@ -67,7 +67,7 @@ instance Misty Maybe where
 -- Relative Difficulty: 6
 instance Misty ((->) t) where
   banana f mx a = f (mx a) a
-  unicorn x _ = x
+  unicorn = const
 
 -- Exercise 10
 -- Relative Difficulty: 6

@@ -38,6 +38,8 @@ main = do
                            banana (\x -> [x * 2]) [1,2,3]
   report "banana empty list" $ assertEqual [] $
                            banana (\x -> [x * 2]) []
+  report "unicorn fun" $ assertEqual 7 $ unicorn 7 "heynow"
+  report "banana fun" $ assertEqual 14 $ banana (\a r -> 5 + a + r) (*2) 3
 
   putStrLn "-------------------------------------------"
 
