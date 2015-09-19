@@ -36,13 +36,6 @@ instance Fluffy (EitherLeft t) where
 instance Fluffy (EitherRight t) where
   furry f (EitherRight x) = EitherRight (fmap f x)
 
-ml :: (Monad m) => (a -> b) -> m a -> m b
-ml f = \a -> do
-  a' <- a
-  return (f a')
-
-ml' :: (Monad m) => (a -> b) -> m a -> m b
-ml' f = \a -> ( a >>= (\a' -> return (f a')) )
 
 class Misty m where
   banana :: (a -> m b) -> m a -> m b
@@ -50,8 +43,20 @@ class Misty m where
   -- Exercise 6
   -- Relative Difficulty: 3
   -- (use banana and/or unicorn)
-  furry' :: (a -> b) -> m a -> m b
-  furry' f = \a -> banana (\a' -> unicorn (f a') ) a
+
+{- we are essentially implementing liftM. figure out how... -}
+ml :: (Monad m) => (a -> b) -> m a -> m b
+ml f ma = do
+  a <- ma
+  return (f a)
+
+{-# ANN ml "HLint: Use liftM" #-}  -- liftM is what we are implementing
+ml' :: (Monad m) => (a -> b) -> m a -> m b
+ml' f a =  a >>= return . f
+
+
+furry' :: (Misty m) => (a -> b) -> m a -> m b
+furry' f = banana $ unicorn . f
 
 -- Exercise 7
 -- Relative Difficulty: 2
@@ -63,7 +68,8 @@ instance Misty [] where
 -- Relative Difficulty: 2
 instance Misty Maybe where
   banana f (Just x) = f x
-  unicorn x = Just x
+  banana _ Nothing = Nothing
+  unicorn = Just
 
 -- Exercise 9
 -- Relative Difficulty: 6
@@ -91,6 +97,7 @@ jellybean :: (Misty m) => m (m a) -> m a
 jellybean = banana id
 
 {- some experiments to determine how apple should look -}
+apple' :: (Monad m) => m t -> m (t -> r) -> m r
 apple' ma mf = do
   a <- ma
   f <- mf
