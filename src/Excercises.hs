@@ -36,13 +36,6 @@ instance Fluffy (EitherLeft t) where
 instance Fluffy (EitherRight t) where
   furry f (EitherRight x) = EitherRight (fmap f x)
 
-ml :: (Monad m) => (a -> b) -> m a -> m b
-ml f = \a -> do
-  a' <- a
-  return (f a')
-
-ml' :: (Monad m) => (a -> b) -> m a -> m b
-ml' f = \a -> ( a >>= (\a' -> return (f a')) )
 
 class Misty m where
   banana :: (a -> m b) -> m a -> m b
@@ -50,8 +43,20 @@ class Misty m where
   -- Exercise 6
   -- Relative Difficulty: 3
   -- (use banana and/or unicorn)
-  furry' :: (a -> b) -> m a -> m b
-  furry' f = \a -> banana (\a' -> unicorn (f a') ) a
+
+{- we are essentially implementing liftM. figure out how... -}
+ml :: (Monad m) => (a -> b) -> m a -> m b
+ml f ma = do
+  a <- ma
+  return (f a)
+
+{-# ANN ml' "HLint: Use liftM" #-}  -- liftM is what we are implementing
+ml' :: (Monad m) => (a -> b) -> m a -> m b
+ml' f a =  a >>= return . f
+
+
+furry' :: (Misty m) => (a -> b) -> m a -> m b
+furry' f = banana $ unicorn . f
 
 -- Exercise 7
 -- Relative Difficulty: 2
@@ -63,13 +68,14 @@ instance Misty [] where
 -- Relative Difficulty: 2
 instance Misty Maybe where
   banana f (Just x) = f x
-  unicorn x = Just x
+  banana _ Nothing = Nothing
+  unicorn = Just
 
 -- Exercise 9
 -- Relative Difficulty: 6
 instance Misty ((->) t) where
-  banana f mx = \a -> f (mx a) a
-  unicorn x = \_ -> x
+  banana f mx a = f (mx a) a
+  unicorn x _ = x
 
 -- Exercise 10
 -- Relative Difficulty: 6
@@ -91,6 +97,7 @@ jellybean :: (Misty m) => m (m a) -> m a
 jellybean = banana id
 
 {- some experiments to determine how apple should look -}
+apple' :: (Monad m) => m t -> m (t -> r) -> m r
 apple' ma mf = do
   a <- ma
   f <- mf
@@ -108,12 +115,8 @@ apple ma mf = banana (\a -> (banana (\f -> unicorn (f a)) mf ) ) ma
 -- Relative Difficulty: 6
 {- some experiments to determine the shape of moppy -}
 
-invert :: (Monad m) => [m a] -> m [a]
-invert ms = fmap reverse $ foldM comb [] ms
-  where comb as ma = ma >>= (\a -> return (a:as))
-
 moppy' :: (Monad m) => [a] -> (a -> m b) -> m [b]
-moppy' as mf = invert $ fmap mf as
+moppy' as mf = reverse <$> foldM (\bs a -> mf a >>= (\b -> return (b:bs)) ) [] as
 
 li :: [Int]
 li = [1,2,3]
@@ -130,16 +133,12 @@ moppied' = moppy' li i2ms
 -- like foldM
 foldy :: (Misty m) => (b -> a -> m b) -> b -> [a] -> m b
 foldy _ a [] = unicorn a
-foldy f a (x:xs) = (\ax -> foldy f ax xs) `banana` ( f a x )
-
--- like invert
-confusy :: (Misty m) => [m a] -> m [a]
-confusy ms = furry' reverse $ foldy combiny [] ms
-  where combiny as ma = (\a -> unicorn (a:as)) `banana` ma
+foldy f a (x:xs) = (\ax -> foldy f ax xs) `banana` f a x
 
 -- Finally..... Moppy!
 moppy :: (Misty m) => [a] -> (a -> m b) -> m [b]
-moppy as mf = confusy $ fmap mf as
+moppy as mf = furry' reverse $
+  foldy (\bs a -> banana (\b -> unicorn (b:bs)) $ mf a ) [] as
 
 -- show that moppy works
 moppied :: Maybe [String]
@@ -152,7 +151,7 @@ moppyIsGood = moppied == moppied'
 -- (bonus: use moppy)
 sausage :: (Misty m) => [m a] -> m [a]
 sausage ms = moppy ms id
--- sausage = confusy
+
 
 -- Exercise 16
 -- Relative Difficulty: 6
@@ -173,7 +172,7 @@ banana4 :: (Misty m) => (a -> b -> c -> d -> e) -> m a -> m b -> m c -> m d -> m
 banana4 = error "todo"
 
 newtype State s a = State {
-  state :: (s -> (s, a))
+  state :: s -> (s, a)
 }
 
 -- Exercise 19
