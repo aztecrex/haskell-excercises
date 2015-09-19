@@ -50,7 +50,7 @@ ml f ma = do
   a <- ma
   return (f a)
 
-{-# ANN ml "HLint: Use liftM" #-}  -- liftM is what we are implementing
+-- {-# ANN ml "HLint: Use liftM" #-}  -- liftM is what we are implementing
 ml' :: (Monad m) => (a -> b) -> m a -> m b
 ml' f a =  a >>= return . f
 
@@ -74,8 +74,8 @@ instance Misty Maybe where
 -- Exercise 9
 -- Relative Difficulty: 6
 instance Misty ((->) t) where
-  banana f mx = \a -> f (mx a) a
-  unicorn x = \_ -> x
+  banana f mx a = f (mx a) a
+  unicorn x _ = x
 
 -- Exercise 10
 -- Relative Difficulty: 6
