@@ -20,8 +20,18 @@ main = do
   let rightRight2 = EitherRight $ Right 2 :: EitherRight String Int
   let rightRight4 = EitherRight $ Right 4 :: EitherRight String Int
   let rightLeft  = EitherRight $ Left "oops" :: EitherRight String Int
-  report "furryEitherRightRight" $ assertEqual rightRight4 $ furry (*2) rightRight2
+  report "furryEitherRightRight" $ assertEqual rightRight4 $
+                                    furry (*2) rightRight2
   report "furryEitherRightLeft" $ assertEqual rightLeft $ furry (*2) rightLeft
+
+  report "furry prime just" $ assertEqual (Just 4) $ furry' (*2) (Just 2)
+  report "furry prime nothing" $ assertEqual Nothing$ furry' (*2) Nothing
+
+  report "unicorn maybe" $ assertEqual (Just 3) $ unicorn 3
+  report "banana just" $ assertEqual (Just 4) $
+                           banana (\x -> Just $ 2 * x) $ Just 2
+  report "banana nothing" $ assertEqual Nothing $
+                          banana (\x -> Just $ 2 * x) Nothing
 
   putStrLn "-------------------------------------------"
 

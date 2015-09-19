@@ -40,20 +40,12 @@ instance Fluffy (EitherRight t) where
 class Misty m where
   banana :: (a -> m b) -> m a -> m b
   unicorn :: a -> m a
+
+
+
   -- Exercise 6
   -- Relative Difficulty: 3
   -- (use banana and/or unicorn)
-
-{- we are essentially implementing liftM. figure out how... -}
-ml :: (Monad m) => (a -> b) -> m a -> m b
-ml f ma = do
-  a <- ma
-  return (f a)
-
--- {-# ANN ml' "HLint: Use liftM" #-}  -- liftM is what we are implementing
-ml' :: (Monad m) => (a -> b) -> m a -> m b
-ml' f a =  a >>= return . f
-
 
 furry' :: (Misty m) => (a -> b) -> m a -> m b
 furry' f = banana $ unicorn . f
