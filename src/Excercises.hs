@@ -8,7 +8,7 @@ class Fluffy f where
 -- Exercise 1
 -- Relative Difficulty: 1
 instance Fluffy [] where
-  furry = fmap
+  furry = map
 
 -- Exercise 2
 -- Relative Difficulty: 1
