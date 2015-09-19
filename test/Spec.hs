@@ -4,8 +4,10 @@ main :: IO ()
 main = do
   putStrLn ""
   putStrLn "- TESTS -----------------------------------"
-  report "furryForList" $ assertEqual [2,4,6] $ furry (*2) [1,2,3]
-  report "furryforEmptyList" $  assertNull $ furry (*2) []
+  report "furryList" $ assertEqual [2,4,6] $ furry (*2) [1,2,3]
+  report "furryEmptyList" $  assertNull $ furry (*2) []
+  report "furryJust" $ assertEqual (Just 4) $ furry (*2) (Just 2)
+  report "furryNothing" $ assertEqual Nothing $ furry (*2) Nothing
   putStrLn "-------------------------------------------"
 
 data Test = OK | WahWah String

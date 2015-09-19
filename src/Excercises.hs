@@ -13,7 +13,8 @@ instance Fluffy [] where
 -- Exercise 2
 -- Relative Difficulty: 1
 instance Fluffy Maybe where
-  furry = fmap
+  furry f (Just x)= Just $ f x
+  furry _ Nothing = Nothing
 
 -- Exercise 3
 -- Relative Difficulty: 5
