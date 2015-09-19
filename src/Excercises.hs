@@ -53,7 +53,7 @@ furry' f = banana $ unicorn . f
 -- Exercise 7
 -- Relative Difficulty: 2
 instance Misty [] where
-  banana f xs = concat ( fmap f xs )
+  banana = concatMap
   unicorn x = [x]
 
 -- Exercise 8

@@ -31,7 +31,13 @@ main = do
   report "banana just" $ assertEqual (Just 4) $
                            banana (\x -> Just $ 2 * x) $ Just 2
   report "banana nothing" $ assertEqual Nothing $
-                          banana (\x -> Just $ 2 * x) Nothing
+                           banana (\x -> Just $ 2 * x) Nothing
+
+  report "unicorn list" $ assertEqual [3] $ unicorn 3
+  report "banana nonempty list" $ assertEqual [2,4,6] $
+                           banana (\x -> [x * 2]) [1,2,3]
+  report "banana empty list" $ assertEqual [] $
+                           banana (\x -> [x * 2]) []
 
   putStrLn "-------------------------------------------"
 
