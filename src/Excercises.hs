@@ -29,13 +29,12 @@ newtype EitherRight a b = EitherRight (Either a b) deriving (Eq, Show)
 instance Fluffy (EitherLeft t) where
   furry f (EitherLeft (Left v)) = EitherLeft (Left $ f v)
   furry f (EitherLeft (Right v)) = EitherLeft (Right v)
-  -- furry f (EitherLeft x) = EitherLeft x
-  -- furry = error "todo"
 
 -- Exercise 5
 -- Relative Difficulty: 5
 instance Fluffy (EitherRight t) where
-  furry f (EitherRight x) = EitherRight (fmap f x)
+  furry f (EitherRight (Right v)) = EitherRight (Right $ f v)
+  furry f (EitherRight (Left v)) = EitherRight (Left v)
 
 
 class Misty m where
