@@ -8,6 +8,7 @@ main = do
   report "furryEmptyList" $  assertNull $ furry (*2) []
   report "furryJust" $ assertEqual (Just 4) $ furry (*2) (Just 2)
   report "furryNothing" $ assertEqual Nothing $ furry (*2) Nothing
+  report "furryFun" $ assertEqual "6" $ furry (show . (*2)) (+1) 2
   putStrLn "-------------------------------------------"
 
 data Test = OK | WahWah String

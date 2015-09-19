@@ -19,7 +19,7 @@ instance Fluffy Maybe where
 -- Exercise 3
 -- Relative Difficulty: 5
 instance Fluffy ((->) t) where
-  furry = fmap
+  furry f g x = f $ g x
 
 newtype EitherLeft b a = EitherLeft (Either a b)
 newtype EitherRight a b = EitherRight (Either a b)
@@ -51,7 +51,7 @@ ml f ma = do
   a <- ma
   return (f a)
 
-{-# ANN ml' "HLint: Use liftM" #-}  -- liftM is what we are implementing
+-- {-# ANN ml' "HLint: Use liftM" #-}  -- liftM is what we are implementing
 ml' :: (Monad m) => (a -> b) -> m a -> m b
 ml' f a =  a >>= return . f
 
