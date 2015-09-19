@@ -21,8 +21,8 @@ instance Fluffy Maybe where
 instance Fluffy ((->) t) where
   furry f g x = f $ g x
 
-newtype EitherLeft b a = EitherLeft (Either a b)
-newtype EitherRight a b = EitherRight (Either a b)
+newtype EitherLeft b a = EitherLeft (Either a b) deriving (Eq, Show)
+newtype EitherRight a b = EitherRight (Either a b) deriving (Eq, Show)
 
 -- Exercise 4
 -- Relative Difficulty: 5
