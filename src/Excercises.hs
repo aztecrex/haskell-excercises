@@ -50,7 +50,7 @@ ml f ma = do
   a <- ma
   return (f a)
 
--- {-# ANN ml "HLint: Use liftM" #-}  -- liftM is what we are implementing
+{-# ANN ml' "HLint: Use liftM" #-}  -- liftM is what we are implementing
 ml' :: (Monad m) => (a -> b) -> m a -> m b
 ml' f a =  a >>= return . f
 
@@ -151,7 +151,7 @@ moppyIsGood = moppied == moppied'
 -- (bonus: use moppy)
 sausage :: (Misty m) => [m a] -> m [a]
 sausage ms = moppy ms id
--- sausage = confusy
+
 
 -- Exercise 16
 -- Relative Difficulty: 6
@@ -172,7 +172,7 @@ banana4 :: (Misty m) => (a -> b -> c -> d -> e) -> m a -> m b -> m c -> m d -> m
 banana4 = error "todo"
 
 newtype State s a = State {
-  state :: (s -> (s, a))
+  state :: s -> (s, a)
 }
 
 -- Exercise 19
