@@ -57,6 +57,15 @@ main = do
 
   report "apple" $ assertEqual (Just 6) $ apple (Just 3) $ Just (*2)
 
+  report "moppy" $ assertEqual (Just ["2","4","6"]) $
+                              moppy [1,2,3] (Just . show . (*2))
+  report "moppy empty" $ assertEqual (Just []) $
+                              moppy [] (Just . show . (*2))
+  report "moppy with a Nothing" $ assertEqual Nothing $
+                              moppy [1,2,3]
+                              (\x -> if x == 2
+                                  then Nothing
+                                  else (Just . show . (*2)) x)
 
 
 
