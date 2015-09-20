@@ -8,52 +8,44 @@ class Fluffy f where
 -- Exercise 1
 -- Relative Difficulty: 1
 instance Fluffy [] where
-  furry = fmap
+  furry = map
 
 -- Exercise 2
 -- Relative Difficulty: 1
 instance Fluffy Maybe where
-  furry = fmap
+  furry f (Just x)= Just $ f x
+  furry _ Nothing = Nothing
 
 -- Exercise 3
 -- Relative Difficulty: 5
 instance Fluffy ((->) t) where
-  furry = fmap
+  furry f g x = f $ g x
 
-newtype EitherLeft b a = EitherLeft (Either a b)
-newtype EitherRight a b = EitherRight (Either a b)
+newtype EitherLeft b a = EitherLeft (Either a b) deriving (Eq, Show)
+newtype EitherRight a b = EitherRight (Either a b) deriving (Eq, Show)
 
 -- Exercise 4
 -- Relative Difficulty: 5
 instance Fluffy (EitherLeft t) where
   furry f (EitherLeft (Left v)) = EitherLeft (Left $ f v)
   furry f (EitherLeft (Right v)) = EitherLeft (Right v)
-  -- furry f (EitherLeft x) = EitherLeft x
-  -- furry = error "todo"
 
 -- Exercise 5
 -- Relative Difficulty: 5
 instance Fluffy (EitherRight t) where
-  furry f (EitherRight x) = EitherRight (fmap f x)
+  furry f (EitherRight (Right v)) = EitherRight (Right $ f v)
+  furry f (EitherRight (Left v)) = EitherRight (Left v)
 
 
 class Misty m where
   banana :: (a -> m b) -> m a -> m b
   unicorn :: a -> m a
+
+
+
   -- Exercise 6
   -- Relative Difficulty: 3
   -- (use banana and/or unicorn)
-
-{- we are essentially implementing liftM. figure out how... -}
-ml :: (Monad m) => (a -> b) -> m a -> m b
-ml f ma = do
-  a <- ma
-  return (f a)
-
-{-# ANN ml' "HLint: Use liftM" #-}  -- liftM is what we are implementing
-ml' :: (Monad m) => (a -> b) -> m a -> m b
-ml' f a =  a >>= return . f
-
 
 furry' :: (Misty m) => (a -> b) -> m a -> m b
 furry' f = banana $ unicorn . f
@@ -61,7 +53,7 @@ furry' f = banana $ unicorn . f
 -- Exercise 7
 -- Relative Difficulty: 2
 instance Misty [] where
-  banana f xs = concat ( fmap f xs )
+  banana = concatMap
   unicorn x = [x]
 
 -- Exercise 8
@@ -75,7 +67,7 @@ instance Misty Maybe where
 -- Relative Difficulty: 6
 instance Misty ((->) t) where
   banana f mx a = f (mx a) a
-  unicorn x _ = x
+  unicorn = const
 
 -- Exercise 10
 -- Relative Difficulty: 6
@@ -96,15 +88,6 @@ instance Misty (EitherRight t) where
 jellybean :: (Misty m) => m (m a) -> m a
 jellybean = banana id
 
-{- some experiments to determine how apple should look -}
-apple' :: (Monad m) => m t -> m (t -> r) -> m r
-apple' ma mf = do
-  a <- ma
-  f <- mf
-  return $ f a
-
-apple'' ma mf = ma >>= (\a -> (mf >>= (\f -> return (f a))))
-
 -- Exercise 13
 -- Relative Difficulty: 6
 apple :: (Misty m) => m a -> m (a -> b) -> m b
@@ -113,38 +96,15 @@ apple ma mf = banana (\a -> (banana (\f -> unicorn (f a)) mf ) ) ma
 
 -- Exercise 14
 -- Relative Difficulty: 6
-{- some experiments to determine the shape of moppy -}
-
-moppy' :: (Monad m) => [a] -> (a -> m b) -> m [b]
-moppy' as mf = reverse <$> foldM (\bs a -> mf a >>= (\b -> return (b:bs)) ) [] as
-
-li :: [Int]
-li = [1,2,3]
-
-i2ms :: Int -> Maybe String
-i2ms x = Just $ show x
-
-moppied' :: Maybe [String]
-moppied' = moppy' li i2ms
-
-
--- so here is the Misty version of the above.
 
 -- like foldM
 foldy :: (Misty m) => (b -> a -> m b) -> b -> [a] -> m b
 foldy _ a [] = unicorn a
 foldy f a (x:xs) = (\ax -> foldy f ax xs) `banana` f a x
 
--- Finally..... Moppy!
 moppy :: (Misty m) => [a] -> (a -> m b) -> m [b]
 moppy as mf = furry' reverse $
   foldy (\bs a -> banana (\b -> unicorn (b:bs)) $ mf a ) [] as
-
--- show that moppy works
-moppied :: Maybe [String]
-moppied = moppy li i2ms
-
-moppyIsGood = moppied == moppied'
 
 -- Exercise 15
 -- Relative Difficulty: 6
