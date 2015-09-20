@@ -53,6 +53,8 @@ main = do
   report "banana either right left" $ assertEqual rightLeft $
                                      banana (\x -> unicorn $ 2 * x) rightLeft
 
+  report "jellybean" $ assertEqual (Just 3) $ jellybean $ Just $ Just 3
+
 
 
 
