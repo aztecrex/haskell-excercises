@@ -96,22 +96,6 @@ apple ma mf = banana (\a -> (banana (\f -> unicorn (f a)) mf ) ) ma
 
 -- Exercise 14
 -- Relative Difficulty: 6
-{- some experiments to determine the shape of moppy -}
-
-moppy' :: (Monad m) => [a] -> (a -> m b) -> m [b]
-moppy' as mf = reverse <$> foldM (\bs a -> mf a >>= (\b -> return (b:bs)) ) [] as
-
-li :: [Int]
-li = [1,2,3]
-
-i2ms :: Int -> Maybe String
-i2ms x = Just $ show x
-
-moppied' :: Maybe [String]
-moppied' = moppy' li i2ms
-
-
--- so here is the Misty version of the above.
 
 -- like foldM
 foldy :: (Misty m) => (b -> a -> m b) -> b -> [a] -> m b
@@ -121,12 +105,6 @@ foldy f a (x:xs) = (\ax -> foldy f ax xs) `banana` f a x
 moppy :: (Misty m) => [a] -> (a -> m b) -> m [b]
 moppy as mf = furry' reverse $
   foldy (\bs a -> banana (\b -> unicorn (b:bs)) $ mf a ) [] as
-
--- show that moppy works
-moppied :: Maybe [String]
-moppied = moppy li i2ms
-
-moppyIsGood = moppied == moppied'
 
 -- Exercise 15
 -- Relative Difficulty: 6
