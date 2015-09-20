@@ -41,6 +41,21 @@ main = do
   report "unicorn fun" $ assertEqual 7 $ unicorn 7 "heynow"
   report "banana fun" $ assertEqual 14 $ banana (\a r -> 5 + a + r) (*2) 3
 
+  report "unicorn either left" $ assertEqual leftLeft2 $ unicorn 2
+  report "banana either left left" $ assertEqual leftLeft4 $
+                                     banana (\x -> unicorn $ 2 * x) leftLeft2
+  report "banana either left right" $ assertEqual leftRight $
+                                     banana (\x -> unicorn $ 2 * x) leftRight
+
+  report "unicorn either right" $ assertEqual rightRight2 $ unicorn 2
+  report "banana either right right" $ assertEqual rightRight4 $
+                                     banana (\x -> unicorn $ 2 * x) rightRight2
+  report "banana either right left" $ assertEqual rightLeft $
+                                     banana (\x -> unicorn $ 2 * x) rightLeft
+
+
+
+
   putStrLn "-------------------------------------------"
 
 data Test = OK | WahWah String
