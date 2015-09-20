@@ -55,6 +55,8 @@ main = do
 
   report "jellybean" $ assertEqual (Just 3) $ jellybean $ Just $ Just 3
 
+  report "apple" $ assertEqual (Just 6) $ apple (Just 3) $ Just (*2)
+
 
 
 
