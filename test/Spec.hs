@@ -95,6 +95,9 @@ main = do
                            state (furry (*2) s1) "hi"
   report "unicorn state" $ assertEqual ("hi", 3) $
                            state (unicorn 3) "hi"
+  report "banana state" $ assertEqual ("hi",4) $
+                           state (banana (\x -> unicorn (4 * x)) s1) "hi"
+
   putStrLn "-------------------------------------------"
 
 data Test = OK | WahWah String

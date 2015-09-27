@@ -144,5 +144,5 @@ instance Fluffy (State s) where
 -- Exercise 20
 -- Relative Difficulty: 10
 instance Misty (State s) where
-  banana = error "todo"
+  banana f m1 = State (\s -> state (f (snd (state m1 s))) s )
   unicorn x = State (\s -> (s,x))
