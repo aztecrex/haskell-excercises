@@ -67,9 +67,11 @@ main = do
                                   then Nothing
                                   else (Just . show . (*2)) x)
 
-  report "sausage" $ assertEqual (Just [1,2,3]) $ sausage [Just 1, Just 2, Just 3]
+  report "sausage" $ assertEqual (Just [1,2,3]) $
+                                  sausage [Just 1, Just 2, Just 3]
 
-
+  report "banana2 just" $ assertEqual (Just 15) $
+                                  banana2 (*) (Just 3) (Just 5)
 
   putStrLn "-------------------------------------------"
 

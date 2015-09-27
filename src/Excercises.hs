@@ -112,12 +112,14 @@ moppy as mf = furry' reverse $
 sausage :: (Misty m) => [m a] -> m [a]
 sausage ms = moppy ms id
 
-
 -- Exercise 16
 -- Relative Difficulty: 6
 -- (bonus: use apple + furry')
+
+
 banana2 :: (Misty m) => (a -> b -> c) -> m a -> m b -> m c
-banana2 = error "todo"
+banana2 f m1 m2 = banana (\x1 -> banana (unicorn . f x1) m2) m1
+-- banana2 = error "todo"
 
 -- Exercise 17
 -- Relative Difficulty: 6
