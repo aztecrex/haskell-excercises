@@ -72,6 +72,10 @@ main = do
 
   report "banana2 just" $ assertEqual (Just 15) $
                                   banana2 (*) (Just 3) (Just 5)
+  report "banana2 left nothing" $ assertEqual Nothing $
+                                  banana2 (*) Nothing (Just 5)
+  report "banana2 right nothing" $ assertEqual Nothing $
+                                  banana2 (*) (Just 3) Nothing
 
   putStrLn "-------------------------------------------"
 
