@@ -90,7 +90,13 @@ main = do
   report "banana4 nothing" $ assertEqual Nothing $
                                  banana4 f4 (Just [1,2,3]) Nothing
                                  (Just [5,6,7]) (Just [8,9])
-
+  let s1 = State (\s -> (s, 1)) :: State String Int
+  report "furry state" $ assertEqual ("hi", 2) $
+                           state (furry (*2) s1) "hi"
+  report "unicorn state" $ assertEqual ("hi", 3) $
+                           state (unicorn 3) "hi"
+  report "banana state" $ assertEqual ("hi",4) $
+                           state (banana (\x -> unicorn (4 * x)) s1) "hi"
 
   putStrLn "-------------------------------------------"
 

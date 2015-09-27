@@ -139,10 +139,10 @@ newtype State s a = State {
 -- Exercise 19
 -- Relative Difficulty: 9
 instance Fluffy (State s) where
-  furry = error "todo"
+  furry f s1 = State (\s -> (s, f (snd (state s1 s))))
 
 -- Exercise 20
 -- Relative Difficulty: 10
 instance Misty (State s) where
-  banana = error "todo"
-  unicorn = error "todo"
+  banana f m1 = State (\s -> state (f (snd (state m1 s))) s )
+  unicorn x = State (\s -> (s,x))
