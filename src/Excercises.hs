@@ -118,8 +118,7 @@ sausage ms = moppy ms id
 
 
 banana2 :: (Misty m) => (a -> b -> c) -> m a -> m b -> m c
-banana2 f m1 m2 = banana (\x1 -> banana (unicorn . f x1) m2) m1
--- banana2 = error "todo"
+banana2 f m1 m2 = apple m2 $ furry' f m1
 
 -- Exercise 17
 -- Relative Difficulty: 6
