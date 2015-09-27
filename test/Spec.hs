@@ -83,6 +83,15 @@ main = do
   report "banana3 nothing" $ assertEqual Nothing $
                                  banana3 f3 (Just [1,2,3]) Nothing (Just [5,6,7])
 
+  let f4 a b c d = a ++ b ++ c ++ d
+  report "banana4 just" $ assertEqual (Just"abcd") $
+                                 banana4 f4 (Just "a") (Just "b") (Just "c")
+                                            (Just "d")
+  report "banana4 nothing" $ assertEqual Nothing $
+                                 banana4 f4 (Just [1,2,3]) Nothing
+                                 (Just [5,6,7]) (Just [8,9])
+
+
   putStrLn "-------------------------------------------"
 
 data Test = OK | WahWah String
