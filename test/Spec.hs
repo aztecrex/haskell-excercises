@@ -80,6 +80,8 @@ main = do
   let f3 a b c = a ++ b ++ c
   report "banana3 just" $ assertEqual (Just"abc") $
                                  banana3 f3 (Just "a") (Just "b") (Just "c")
+  report "banana3 nothing" $ assertEqual Nothing $
+                                 banana3 f3 (Just [1,2,3]) Nothing (Just [5,6,7])
 
   putStrLn "-------------------------------------------"
 
