@@ -77,6 +77,10 @@ main = do
   report "banana2 right nothing" $ assertEqual Nothing $
                                   banana2 (*) (Just 3) Nothing
 
+  let f3 a b c = a ++ b ++ c
+  report "banana3 just" $ assertEqual (Just"abc") $
+                                 banana3 f3 (Just "a") (Just "b") (Just "c")
+
   putStrLn "-------------------------------------------"
 
 data Test = OK | WahWah String
