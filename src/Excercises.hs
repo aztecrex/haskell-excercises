@@ -1,3 +1,5 @@
+{- These problems are from http://blog.tmorris.net/posts/20-intermediate-haskell-exercises/ -}
+
 module Excercises where
 
 import Control.Monad(foldM)
