@@ -70,8 +70,8 @@ main = do
   report "sausage" $ assertEqual (Just [1,2,3]) $
                                   sausage [Just 1, Just 2, Just 3]
 
-  report "banana2 just" $ assertEqual (Just 15) $
-                                  banana2 (*) (Just 3) (Just 5)
+  report "banana2 just" $ assertEqual (Just "ab") $
+                                  banana2 (++) (Just "a") (Just "b")
   report "banana2 left nothing" $ assertEqual Nothing $
                                   banana2 (*) Nothing (Just 5)
   report "banana2 right nothing" $ assertEqual Nothing $
