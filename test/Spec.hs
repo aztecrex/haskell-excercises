@@ -93,6 +93,8 @@ main = do
   let s1 = State (\s -> (s, 1)) :: State String Int
   report "furry state" $ assertEqual ("hi", 2) $
                            state (furry (*2) s1) "hi"
+  report "unicorn state" $ assertEqual ("hi", 3) $
+                           state (unicorn 3) "hi"
   putStrLn "-------------------------------------------"
 
 data Test = OK | WahWah String
