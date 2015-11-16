@@ -139,10 +139,16 @@ newtype State s a = State {
 -- Exercise 19
 -- Relative Difficulty: 9
 instance Fluffy (State s) where
-  furry f s1 = State (\s -> (s, f (snd (state s1 s))))
+  furry f ms =
+    State $ \s ->
+      let (s',a) = state ms s
+      in (s', f a)
 
 -- Exercise 20
 -- Relative Difficulty: 10
 instance Misty (State s) where
-  banana f m1 = State (\s -> state (f (snd (state m1 s))) s )
+  banana f ms =
+    State $ \s ->
+      let (s', a) = state ms s
+      in state (f a) s'
   unicorn x = State (\s -> (s,x))
