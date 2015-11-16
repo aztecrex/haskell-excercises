@@ -43,8 +43,6 @@ class Misty m where
   banana :: (a -> m b) -> m a -> m b
   unicorn :: a -> m a
 
-
-
   -- Exercise 6
   -- Relative Difficulty: 3
   -- (use banana and/or unicorn)
